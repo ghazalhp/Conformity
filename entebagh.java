@@ -11,37 +11,53 @@ public class entebagh {
 		Queue<Integer> q = new LinkedList<Integer>();
 		int[] color = new int[n];
 		boolean[] mark = new boolean[n];
-		color[0] = 1;
-		q.add(0);
+		int index = 0;
 		boolean check = true;
-		while (!q.isEmpty()) {
-			int node = q.poll();
-			for (int i = 0; i < n; i++) {
-				if (g[node][i] == 1) {
-					if (!mark[i]) {
-						q.add(i);
-						mark[i] = true;
+		boolean hasZero = true;
+		while (check && hasZero) {
+			color[index] = 1;
+			q.add(index);
+
+			while (!q.isEmpty()) {
+				int node = q.poll();
+				for (int i = 0; i < n; i++) {
+					if (g[node][i] == 1) {
+						if (!mark[i]) {
+							q.add(i);
+							mark[i] = true;
+						}
+						if (color[i] == color[node]) {
+							check = false;
+							break;
+						}
+						color[i] = -color[node];
+
 					}
-					if (color[i] == color[node]) {
-						check = false;
+					if (!check)
 						break;
-					}
-					color[i] = -color[node];
-					if (color[i] == 1)
-						j++;
-					else
-						w++;
 				}
-				if (!check)
-					break;
 			}
+			hasZero = false;
+			for (int i = 0; i < n; i++)
+				if (color[i] == 0) {
+					index = i;
+					hasZero = true;
+					break;
+				}
+		}
+		for (int i = 0; i < n; i++) {
+			System.out.println(color[i] + " ");
+			if (color[i] == 1)
+				w++;
+			else
+				j++;
 		}
 		return check;
 
 	}
 
 	static boolean bpm(int[][] g, int u, boolean seen[], int matchR[]) {
-
+		System.out.println("w" + w + " " + j);
 		for (int v = 0; v < j; v++) {
 
 			if (g[u][v] > 0 && !seen[v]) {
